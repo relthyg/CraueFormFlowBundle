@@ -5,6 +5,7 @@ namespace Craue\FormFlowBundle\Tests\IntegrationTestBundle\DependencyInjection\C
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Loader\PhpFileLoader;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 
 /**
@@ -18,8 +19,8 @@ class DoctrineStorageCompilerPass implements CompilerPassInterface {
 
 	public function process(ContainerBuilder $container) : void {
 		if ($container->has('doctrine.dbal.default_connection')) {
-			$loader = new XmlFileLoader($container, new FileLocator(__DIR__.'/../../Resources/config'));
-			$loader->load('doctrine_storage.xml');
+			$loader = new PhpFileLoader($container, new FileLocator(__DIR__.'/../../Resources/config'));
+			$loader->load('doctrine_storage.php');
 		}
 	}
 

@@ -1,6 +1,6 @@
 imports:
-  - { resource: '@CraueFormFlowBundle/Resources/config/form_flow.xml' }
-  - { resource: '@IntegrationTestBundle/Resources/config/controller.xml' }
+  - { resource: '@CraueFormFlowBundle/Resources/config/form_flow.php' }
+  - { resource: '@IntegrationTestBundle/Resources/config/controller.php' }
   - { resource: config_hacks.php }
 
 framework:
