@@ -20,6 +20,12 @@
 		}
 	],
 	"homepage": "https://github.com/craue/CraueFormFlowBundle",
+	"repositories": [
+		{
+			"type": "vcs",
+			"url": "https://github.com/relthyg/CraueTranslationsTests"
+		}
+	],
 	"require": {
 		"php": "^7.4 || ^8.1",
 		"symfony/config": "^6.4 || ^7.2 || ^8.0",
@@ -35,7 +41,7 @@
 		"symfony/yaml": "^6.4 || ^7.2 || ^8.0"
 	},
 	"require-dev": {
-		"craue/translations-tests": "^1.1",
+		"craue/translations-tests": "dev-symfony8 as 1.2",
 		"doctrine/collections": "^1.8 || ^2.1",
 		"doctrine/common": "^2.9 || ^3.0",
 		"doctrine/dbal": "^2.10 || ^3.0",
