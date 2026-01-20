@@ -163,11 +163,16 @@ class DoctrineStorage implements StorageInterface {
 			new Column($this->valueColumn, Type::getType(Types::TEXT)),
 		]);
 
-        $table->addPrimaryKeyConstraint(
-            PrimaryKeyConstraint::editor()
-                ->setUnquotedColumnNames($this->keyColumn)
-                ->create()
-        );
+        // BC for doctrine/dbal < 4
+        if (method_exists($table, 'addPrimaryKeyConstraint')) {
+            $table->addPrimaryKeyConstraint(
+                PrimaryKeyConstraint::editor()
+                    ->setUnquotedColumnNames($this->keyColumn)
+                    ->create()
+            );
+        } else {
+            $table->setPrimaryKey([$this->keyColumn]);
+        }
 
 		$this->schemaManager->createTable($table);
 	}
