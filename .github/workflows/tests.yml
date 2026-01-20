@@ -17,7 +17,7 @@ jobs:
       SYMFONY_REQUIRE: ${{ matrix.symfony }}
       SYMFONY_DEPRECATIONS_HELPER: ${{ matrix.symfony-deprecations }}
       DB_DSN_MYSQL: mysql://test:test@127.0.0.1/craue_form_flow_tests?serverVersion=8.0.44
-      DB_DSN_POSTGRESQL: pgsql://test:test@127.0.0.1/craue_form_flow_tests
+      DB_DSN_POSTGRESQL: pgsql://test:test@127.0.0.1/craue_form_flow_tests?serverVersion=18.1
       DB_DSN_SQLITE: sqlite:///sqlite.db
 
     strategy:
@@ -60,7 +60,7 @@ jobs:
           - 3306:3306
 
       postgres:
-        image: postgres
+        image: postgres:18.1
         env:
           POSTGRES_USER: test
           POSTGRES_PASSWORD: test
