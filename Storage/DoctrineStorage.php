@@ -53,8 +53,15 @@ class DoctrineStorage implements StorageInterface {
 		$this->storageKeyGenerator = $storageKeyGenerator;
 		// TODO just call `createSchemaManager()` as soon as DBAL >= 3.1 is required
 		$this->schemaManager = \method_exists($this->conn, 'createSchemaManager') ? $this->conn->createSchemaManager() : $this->conn->getSchemaManager();
-		$this->keyColumn = $this->conn->quoteSingleIdentifier(self::KEY_COLUMN);
-		$this->valueColumn = $this->conn->quoteSingleIdentifier(self::VALUE_COLUMN);
+
+        // BC for doctrine/dbal < 4
+        if(method_exists($this->conn, 'quoteSingleIdentifier')) {
+            $this->keyColumn = $this->conn->quoteSingleIdentifier(self::KEY_COLUMN);
+            $this->valueColumn = $this->conn->quoteSingleIdentifier(self::VALUE_COLUMN);
+        } else {
+            $this->keyColumn = $this->conn->quoteIdentifier(self::KEY_COLUMN);
+            $this->valueColumn = $this->conn->quoteIdentifier(self::VALUE_COLUMN);
+        }
 	}
 
 	/**
