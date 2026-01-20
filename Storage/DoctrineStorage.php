@@ -5,6 +5,7 @@ namespace Craue\FormFlowBundle\Storage;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Schema\AbstractSchemaManager;
 use Doctrine\DBAL\Schema\Column;
+use Doctrine\DBAL\Schema\PrimaryKeyConstraint;
 use Doctrine\DBAL\Schema\Table;
 use Doctrine\DBAL\Types\Type;
 use Doctrine\DBAL\Types\Types;
@@ -155,7 +156,12 @@ class DoctrineStorage implements StorageInterface {
 			new Column($this->valueColumn, Type::getType(Types::TEXT)),
 		]);
 
-		$table->setPrimaryKey([$this->keyColumn]);
+        $table->addPrimaryKeyConstraint(
+            PrimaryKeyConstraint::editor()
+                ->setUnquotedColumnNames($this->keyColumn)
+                ->create()
+        );
+
 		$this->schemaManager->createTable($table);
 	}
 
