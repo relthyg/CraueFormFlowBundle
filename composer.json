@@ -20,12 +20,6 @@
 		}
 	],
 	"homepage": "https://github.com/craue/CraueFormFlowBundle",
-	"repositories": [
-		{
-			"type": "vcs",
-			"url": "https://github.com/relthyg/CraueTranslationsTests"
-		}
-	],
 	"require": {
 		"php": "^7.4 || ^8.1",
 		"symfony/config": "^6.4 || ^7.2 || ^8.0",
@@ -63,6 +57,12 @@
 	"conflict": {
 		"doctrine/dbal": "<2.10"
 	},
+	"repositories": [
+		{
+			"type": "vcs",
+			"url": "https://github.com/relthyg/CraueTranslationsTests"
+		}
+	],
 	"minimum-stability": "stable",
 	"autoload": {
 		"psr-4": {
