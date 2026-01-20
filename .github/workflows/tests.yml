@@ -16,7 +16,7 @@ jobs:
     env:
       SYMFONY_REQUIRE: ${{ matrix.symfony }}
       SYMFONY_DEPRECATIONS_HELPER: ${{ matrix.symfony-deprecations }}
-      DB_DSN_MYSQL: mysql://test:test@127.0.0.1/craue_form_flow_tests
+      DB_DSN_MYSQL: mysql://test:test@127.0.0.1/craue_form_flow_tests?serverVersion=8.0
       DB_DSN_POSTGRESQL: pgsql://test:test@127.0.0.1/craue_form_flow_tests
       DB_DSN_SQLITE: sqlite:///sqlite.db
 
