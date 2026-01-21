@@ -39,7 +39,7 @@
 		"doctrine/collections": "^1.8 || ^2.1",
 		"doctrine/common": "^2.9 || ^3.0",
 		"doctrine/dbal": "^3.1 || ^4.4",
-		"doctrine/doctrine-bundle": "^1.10 || ^2.0",
+		"doctrine/doctrine-bundle": "^1.10 || ^2.0 || ^3.2",
 		"phpstan/extension-installer": "^1.1",
 		"phpstan/phpstan": "^1.10",
 		"phpstan/phpstan-deprecation-rules": "^1.0",
