@@ -5,6 +5,7 @@ namespace Craue\FormFlowBundle\Storage;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Schema\AbstractSchemaManager;
 use Doctrine\DBAL\Schema\Column;
+use Doctrine\DBAL\Schema\PrimaryKeyConstraint;
 use Doctrine\DBAL\Schema\Table;
 use Doctrine\DBAL\Types\Type;
 use Doctrine\DBAL\Types\Types;
@@ -50,10 +51,19 @@ class DoctrineStorage implements StorageInterface {
 	public function __construct(Connection $conn, StorageKeyGeneratorInterface $storageKeyGenerator) {
 		$this->conn = $conn;
 		$this->storageKeyGenerator = $storageKeyGenerator;
-		// TODO just call `createSchemaManager()` as soon as DBAL >= 3.1 is required
-		$this->schemaManager = \method_exists($this->conn, 'createSchemaManager') ? $this->conn->createSchemaManager() : $this->conn->getSchemaManager();
-		$this->keyColumn = $this->conn->quoteIdentifier(self::KEY_COLUMN);
-		$this->valueColumn = $this->conn->quoteIdentifier(self::VALUE_COLUMN);
+		$this->schemaManager = $this->conn->createSchemaManager();
+
+        // BC for doctrine/dbal < 4
+        /* @phpstan-ignore function.alreadyNarrowedType */
+        if(method_exists($this->conn, 'quoteSingleIdentifier')) {
+            $this->keyColumn = $this->conn->quoteSingleIdentifier(self::KEY_COLUMN);
+            $this->valueColumn = $this->conn->quoteSingleIdentifier(self::VALUE_COLUMN);
+        } else {
+            /* @phpstan-ignore method.deprecated */
+            $this->keyColumn = $this->conn->quoteIdentifier(self::KEY_COLUMN);
+            /* @phpstan-ignore method.deprecated */
+            $this->valueColumn = $this->conn->quoteIdentifier(self::VALUE_COLUMN);
+        }
 	}
 
 	/**
@@ -134,15 +144,7 @@ class DoctrineStorage implements StorageInterface {
 			->setParameter('key', $this->generateKey($key))
 		;
 
-		// TODO just call `executeQuery()` as soon as DBAL >= 2.13.1 is required
-		$result = \method_exists($qb, 'executeQuery') ? $qb->executeQuery() : $qb->execute();
-
-		// TODO remove as soon as Doctrine DBAL >= 3.0 is required
-		if (!\method_exists($result, 'fetchOne')) {
-			return $result->fetchColumn();
-		}
-
-		return $result->fetchOne();
+        return $qb->executeQuery()->fetchOne();
 	}
 
 	private function tableExists() {
@@ -155,12 +157,23 @@ class DoctrineStorage implements StorageInterface {
 			new Column($this->valueColumn, Type::getType(Types::TEXT)),
 		]);
 
-		$table->setPrimaryKey([$this->keyColumn]);
+        // BC for doctrine/dbal < 4
+        /* @phpstan-ignore function.alreadyNarrowedType */
+        if (method_exists($table, 'addPrimaryKeyConstraint')) {
+            $table->addPrimaryKeyConstraint(
+                PrimaryKeyConstraint::editor()
+                    ->setUnquotedColumnNames($this->keyColumn)
+                    ->create()
+            );
+        } else {
+            /* @phpstan-ignore method.deprecated */
+            $table->setPrimaryKey([$this->keyColumn]);
+        }
+
 		$this->schemaManager->createTable($table);
 	}
 
 	private function generateKey($key) {
 		return $this->storageKeyGenerator->generate($key);
 	}
-
 }
