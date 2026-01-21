@@ -538,9 +538,10 @@ abstract class FormFlow implements FormFlowInterface {
 			case 'POST':
 				return intval($request->request->get($this->getFormStepKey(), $defaultStepNumber));
 			case 'GET':
-				return $this->allowDynamicStepNavigation || $this->allowRedirectAfterSubmit ?
-						intval($request->get($this->dynamicStepNavigationStepParameter, $defaultStepNumber)) :
-						$defaultStepNumber;
+                $result = $request->attributes->get($this->dynamicStepNavigationStepParameter, $request);
+                $var = ($request !== $result) ? $result : $request->query->get($this->dynamicStepNavigationStepParameter, (string)$defaultStepNumber);
+
+                return ($this->allowDynamicStepNavigation || $this->allowRedirectAfterSubmit) ? (int)$var : $defaultStepNumber;
 		}
 
 		return $defaultStepNumber;
@@ -625,7 +626,8 @@ abstract class FormFlow implements FormFlowInterface {
 		$instanceId = null;
 
 		if ($this->allowDynamicStepNavigation || $this->allowRedirectAfterSubmit) {
-			$instanceId = $request->get($this->getDynamicStepNavigationInstanceParameter());
+            $requestData = in_array($request->getMethod(), ['POST', 'PUT'], true) ? $request->request : $request->query;
+			$instanceId = $requestData->get($this->getDynamicStepNavigationInstanceParameter());
 		}
 
 		if ($instanceId === null) {
@@ -652,7 +654,7 @@ abstract class FormFlow implements FormFlowInterface {
 			$reset = true;
 		}
 
-		if (in_array($request->getMethod(), ['POST', 'PUT'], true) && $request->get($this->getFormStepKey()) !== null && !$this->dataManager->exists($this)) {
+		if (in_array($request->getMethod(), ['POST', 'PUT'], true) && $request->request->get($this->getFormStepKey()) !== null && !$this->dataManager->exists($this)) {
 			// flow is expired, drop posted data and reset
 			$request->request->replace();
 			$reset = true;
