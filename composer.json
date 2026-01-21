@@ -35,7 +35,7 @@
 		"symfony/yaml": "^6.4 || ^7.2 || ^8.0"
 	},
 	"require-dev": {
-		"craue/translations-tests": "^1.1",
+		"craue/translations-tests": "dev-symfony8 as 1.2",
 		"doctrine/collections": "^1.8 || ^2.1",
 		"doctrine/common": "^2.9 || ^3.0",
 		"doctrine/dbal": "^3.1 || ^4.4",
@@ -57,6 +57,12 @@
 	"conflict": {
 		"doctrine/dbal": "<2.10"
 	},
+	"repositories": [
+		{
+			"type": "vcs",
+			"url": "https://github.com/relthyg/CraueTranslationsTests"
+		}
+	],
 	"minimum-stability": "stable",
 	"autoload": {
 		"psr-4": {
