@@ -23,7 +23,8 @@ class CraueFormFlowExtension extends Extension implements CompilerPassInterface 
 	/**
 	 * @return void
 	 */
-	public function load(array $config, ContainerBuilder $container) {
+	public function load(array $config, ContainerBuilder $container): void
+    {
 		$loader = new XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
 		$loader->load('form_flow.xml');
 		$loader->load('twig.xml');
@@ -35,7 +36,8 @@ class CraueFormFlowExtension extends Extension implements CompilerPassInterface 
 	/**
 	 * @return void
 	 */
-	public function process(ContainerBuilder $container) {
+	public function process(ContainerBuilder $container): void
+    {
 		$baseFlowDefinitionMethodCalls = $container->getDefinition('craue.form.flow')->getMethodCalls();
 
 		foreach (array_keys($container->findTaggedServiceIds(self::FORM_FLOW_TAG)) as $id) {
