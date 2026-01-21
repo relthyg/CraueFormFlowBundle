@@ -10,25 +10,3 @@ parameters:
 		-
 			message: '#^Unsafe usage of new static\(\)\.$#'
 			path: Form/Step.php
-		# TODO remove as soon as Doctrine DBAL >= 2.13.1 is required
-		-
-			message: """
-				#^Call to deprecated method execute\\(\\) of class Doctrine\\\\DBAL\\\\Query\\\\QueryBuilder\\:
-				Use \\{@see executeQuery\\(\\)\\} or \\{@see executeStatement\\(\\)\\} instead\\.$#
-			"""
-			path: Storage/DoctrineStorage.php
-		# TODO remove as soon as Doctrine DBAL >= 3.0 is required
-		-
-			message: '#^Cannot call method fetchColumn\(\) on Doctrine\\DBAL\\Result\|int\|string\.$#'
-			path: Storage/DoctrineStorage.php
-		# TODO remove as soon as Doctrine DBAL >= 3.1 is required
-		-
-			message: "#^Call to function method_exists\\(\\) with Doctrine\\\\DBAL\\\\Connection and 'createSchemaManager' will always evaluate to true\\.$#"
-			path: Storage/DoctrineStorage.php
-		# TODO remove as soon as Doctrine DBAL >= 3.1 is required
-		-
-			message: """
-				#^Call to deprecated method getSchemaManager\\(\\) of class Doctrine\\\\DBAL\\\\Connection\\:
-				Use \\{@see createSchemaManager\\(\\)\\} instead\\.$#
-			"""
-			path: Storage/DoctrineStorage.php
