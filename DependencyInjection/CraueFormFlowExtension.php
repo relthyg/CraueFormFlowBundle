@@ -23,7 +23,8 @@ class CraueFormFlowExtension extends Extension implements CompilerPassInterface 
 	/**
 	 * @return void
 	 */
-	public function load(array $config, ContainerBuilder $container) {
+	public function load(array $config, ContainerBuilder $container): void
+    {
 		$loader = new PhpFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
 		$loader->load('form_flow.php');
 		$loader->load('twig.php');
